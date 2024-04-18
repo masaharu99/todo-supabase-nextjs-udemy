@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    volumes:
+      - ./todo-app:/todo-app
+    working_dir: /todo-app
+    ports:
+      - 3000:3000
+    command: >
+      /bin/sh -c '
+      yarn build &&
+      yarn start
+      '
+    tty: true
+    stdin_open: true
