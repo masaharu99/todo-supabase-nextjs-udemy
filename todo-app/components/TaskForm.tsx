@@ -13,7 +13,6 @@ export const TaskForm: FC = () => {
     const {
       data: { user },
     } = await supabase.auth.getUser()
-    console.log(user)
     if (editedTask.id === '') {
       createTaskMutation.mutate({
         title: editedTask.title,

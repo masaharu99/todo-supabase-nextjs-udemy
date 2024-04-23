@@ -5,7 +5,7 @@ import { supabase } from '../utils/supabase'
 
 export const useMutateNotice = () => {
   const queryClient = useQueryClient()
-  const reset = useStore((state) => state.resetEditedTask)
+  const reset = useStore((state) => state.resetEditedNotice)
 
   const createNoticeMutation = useMutation(
     async (notice: Omit<Notice, 'id' | 'created_at'>) => {
@@ -38,6 +38,7 @@ export const useMutateNotice = () => {
         .update({ content: notice.content })
         .eq('id', notice.id)
         .select()
+      console.log(data)
       if (error) throw new Error(error.message)
       return data
     },
@@ -45,9 +46,12 @@ export const useMutateNotice = () => {
       onSuccess: (res, variables) => {
         const previousNotices = queryClient.getQueryData<Notice[]>('notices')
         if (previousNotices) {
-          previousNotices.map((notice) => {
-            notice.id === variables.id ? res[0] : notice
-          })
+          queryClient.setQueryData(
+            'notices',
+            previousNotices.map((notice) => {
+              notice.id === variables.id ? res[0] : notice
+            }),
+          )
         }
         reset()
       },
