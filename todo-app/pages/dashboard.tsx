@@ -11,10 +11,14 @@ import { TaskForm } from '../components/TaskForm'
 import { TaskList } from '../components/TaskList'
 import { NoticeForm } from '../components/NoticeForm'
 import { NoticeList } from '../components/NoticeList'
+import { useQueryClient } from 'react-query'
 
 const Dashboard: NextPage = () => {
+  const queryClient = useQueryClient()
   const signOut = () => {
     supabase.auth.signOut()
+    queryClient.removeQueries('todos')
+    queryClient.removeQueries('notices')
   }
 
   return (
